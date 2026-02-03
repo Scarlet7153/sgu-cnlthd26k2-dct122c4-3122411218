@@ -11,81 +11,37 @@
       "type": "n8n-nodes-base.telegramTrigger",
       "typeVersion": 1.2,
       "position": [
-        -144,
-        16
+        -384,
+        96
       ],
-      "id": "72539dc8-d72d-4ea4-ab28-40a426a9b406",
+      "id": "1eec1c16-aac3-438f-942e-0c571d4e03b1",
       "name": "Telegram Trigger",
       "webhookId": "61c6824d-f693-4d3b-87aa-e7985aa1b72f",
       "credentials": {
         "telegramApi": {
-          "id": "7yMEQbBPOBUDZKED",
+          "id": "C1i6lzI8mQLPAoyI",
           "name": "Telegram account"
         }
       }
     },
     {
       "parameters": {
-        "url": "https://api.themoviedb.org/3/movie/now_playing",
-        "sendQuery": true,
-        "queryParameters": {
-          "parameters": [
-            {
-              "name": "api_key",
-              "value": "2da0cea0af334ab7e1bfeacbf330826a"
-            },
-            {
-              "name": "language",
-              "value": "vi-VN"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.3,
-      "position": [
-        224,
-        16
-      ],
-      "id": "10a60c5f-2e74-4fcd-8630-7baacfa77944",
-      "name": "HTTP Request"
-    },
-    {
-      "parameters": {
-        "promptType": "define",
-        "text": "=[VAI TRÒ]\nBạn là Trợ lý AI cá nhân thông minh và tận tụy.\n\n[DỮ LIỆU ĐẦU VÀO]\nDanh sách phim (JSON): {{ JSON.stringify($json.results) }}\n\n[CÂU HỎI CỦA NGƯỜI DÙNG]\n\"{{ $('Telegram Trigger').item.json.message.text }}\"\n\n[NHIỆM VỤ PHÂN TÍCH]\nHãy đọc kỹ câu hỏi của người dùng và chọn 1 trong 2 cách phản hồi sau:\n\n--- TRƯỜNG HỢP 1: NGƯỜI DÙNG MUỐN GỢI Ý (CHUNG HOẶC THEO THỂ LOẠI) ---\n(Ví dụ: \"Phim gì hay?\", \"Tìm phim kinh dị\", \"Thích xem phim tình cảm\", \"Có phim hoạt hình không?\")\n\n-> BƯỚC 1 (QUAN TRỌNG): Kiểm tra xem người dùng có nhắc đến thể loại cụ thể nào không (Kinh dị, Hài, Hành động...)?\n   - NẾU CÓ: Hãy lọc danh sách và chỉ chọn ra 3 phim thuộc đúng thể loại đó (hoặc gần giống nhất).\n   - NẾU KHÔNG (hỏi chung chung): Hãy chọn 3 phim có điểm đánh giá cao nhất/hot nhất.\n\n-> BƯỚC 2: Trình bày theo cấu trúc:\n   Chào bạn, dựa theo sở thích của bạn, mình tìm được 3 phim này:\n   1. TÊN PHIM (VIẾT HOA) - [Ghi chú thể loại, ví dụ: Phim Kinh Dị]\n   Review: [Review ngắn gọn, tập trung vào yếu tố người dùng thích. VD: \"Phim này dọa ma cực sợ...\"]\n   Lời khuyên: [Câu thúc giục nhẹ nhàng]\n   (Lặp lại cho 3 phim)\n\n--- TRƯỜNG HỢP 2: NGƯỜI DÙNG HỎI CHI TIẾT VỀ MỘT PHIM CỤ THỂ ---\n(Ví dụ: \"Nói rõ hơn về phim Đất Rừng Phương Nam\", \"Review phim Mai\", \"Nội dung phim này là gì?\")\n-> Tìm đúng bộ phim đó trong danh sách dữ liệu.\n-> Viết một bài review chi tiết, sâu sắc hơn về nội dung, diễn viên của RIÊNG phim đó.\n-> Trả lời trực tiếp vào câu hỏi, không cần liệt kê các phim khác.\n\n[QUY TẮC CHUNG]\n- Xưng hô: \"Mình\" - \"Bạn\".\n- Giọng văn: Thân thiện, tự nhiên.\n- Nếu không tìm thấy phim nào đúng thể loại yêu cầu, hãy xin lỗi khéo và gợi ý phim hot khác.",
-        "batching": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.chainLlm",
-      "typeVersion": 1.9,
-      "position": [
-        400,
-        16
-      ],
-      "id": "9721b69a-7898-4e47-8794-edcc260c352e",
-      "name": "Basic LLM Chain",
-      "retryOnFail": true,
-      "waitBetweenTries": 5000
-    },
-    {
-      "parameters": {
         "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
-        "text": "={{$json.text.replace(/[*_`\\[\\]()]/g, '') }}",
+        "text": "={{$json.output.replace(/[*_`\\[\\]()]/g, '') }}",
         "additionalFields": {}
       },
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        752,
-        16
+        528,
+        416
       ],
-      "id": "59e9dcae-7c92-4672-8a42-fec88c65ee55",
+      "id": "e2510050-d1de-4656-a5a8-0cf95362592c",
       "name": "Send a text message",
       "webhookId": "c48a9c8d-c289-4b0f-9edf-b7bd20c79b0d",
       "credentials": {
         "telegramApi": {
-          "id": "7yMEQbBPOBUDZKED",
+          "id": "C1i6lzI8mQLPAoyI",
           "name": "Telegram account"
         }
       }
@@ -98,14 +54,14 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
       "typeVersion": 1,
       "position": [
-        480,
-        144
+        80,
+        592
       ],
-      "id": "9a2aed76-db9f-4cad-b94a-6dee223e5e40",
+      "id": "533f9dea-2b6d-4c4a-a672-7c556fc55b8c",
       "name": "Groq Chat Model",
       "credentials": {
         "groqApi": {
-          "id": "Q9enq2gdiaEOCMmh",
+          "id": "ltEHRx7S8lDeYZGx",
           "name": "Groq account"
         }
       }
@@ -125,10 +81,10 @@
                 "conditions": [
                   {
                     "leftValue": "={{ $json.message.text }}",
-                    "rightValue": "^\\/",
+                    "rightValue": "/start",
                     "operator": {
                       "type": "string",
-                      "operation": "regex"
+                      "operation": "equals"
                     },
                     "id": "b1716251-e1a1-486d-ab74-d2c8e5c34fa7"
                   }
@@ -147,9 +103,9 @@
                 },
                 "conditions": [
                   {
-                    "id": "4ecce9ac-b373-4dfb-bb10-80c2bdf1ebc0",
-                    "leftValue": "=",
-                    "rightValue": "",
+                    "id": "8b64eaf1-5bd6-47d0-8006-f7509edba30e",
+                    "leftValue": "={{ $json.message.text }}",
+                    "rightValue": "/help",
                     "operator": {
                       "type": "string",
                       "operation": "equals",
@@ -181,6 +137,29 @@
                 ],
                 "combinator": "and"
               }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "4ecce9ac-b373-4dfb-bb10-80c2bdf1ebc0",
+                    "leftValue": "=",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
             }
           ]
         },
@@ -189,33 +168,11 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.4,
       "position": [
-        16,
-        0
+        -224,
+        80
       ],
-      "id": "92ce7f97-528d-452c-94e0-fb9ba541f32d",
+      "id": "54e0156b-f40d-4e54-b242-615985ed4d21",
       "name": "Switch"
-    },
-    {
-      "parameters": {
-        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
-        "text": "=Xin chào! 👋\nMình là trợ lý AI tra cứu phim. 🎬\nBạn muốn tìm phim gì cứ nhắn tên phim hoặc nội dung vào đây để mình tìm giúp nhé!",
-        "additionalFields": {}
-      },
-      "type": "n8n-nodes-base.telegram",
-      "typeVersion": 1.2,
-      "position": [
-        224,
-        -144
-      ],
-      "id": "a8867cec-5ec7-4a4b-859e-fefa8c76fcd5",
-      "name": "Send a text message1",
-      "webhookId": "c48a9c8d-c289-4b0f-9edf-b7bd20c79b0d",
-      "credentials": {
-        "telegramApi": {
-          "id": "7yMEQbBPOBUDZKED",
-          "name": "Telegram account"
-        }
-      }
     },
     {
       "parameters": {
@@ -228,8 +185,8 @@
               "value": "2da0cea0af334ab7e1bfeacbf330826a"
             },
             {
-              "name": "query",
-              "value": "={{ $json.message.text.replace(/^[Tt]railer\\s/g, '') }}"
+              "name": "=query",
+              "value": "={{ $json.message.text\n   .replace(/^[Tt]railer\\s*/i, '')                  // Xóa chữ Trailer\n   .replace(/\\b(phim|movie)\\b/gi, '')               // Xóa chữ Phim\n   .replace(/\\b(phần|tập|part)\\s*(\\d+)\\b/gi, ' $2') // Biến \"Phần 2\" thành \" 2\"\n   .replace(/\\s+1\\s*$/g, '')                        // Xóa số 1 ở cuối (Avatar 1 -> Avatar)\n   .replace(/\\s+/g, ' ')                            // Xóa dấu cách thừa\n   .trim()\n}}"
             },
             {
               "name": "language",
@@ -242,15 +199,15 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        224,
-        272
+        0,
+        192
       ],
-      "id": "5fc8ee2e-504d-465b-b9c8-eb8beaea71bd",
+      "id": "c43f9ac6-4fd8-4d38-bab6-c21a42a20526",
       "name": "Request Movie"
     },
     {
       "parameters": {
-        "url": "=https://api.themoviedb.org/3/movie/{{ $json.results[0].id }}/videos",
+        "url": "=https://api.themoviedb.org/3/movie/{{ $('Request Movie').item.json.results.sort((a,b) => b.vote_count - a.vote_count)[0].id }}/videos",
         "sendQuery": true,
         "queryParameters": {
           "parameters": [
@@ -265,33 +222,161 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        416,
-        272
+        192,
+        192
       ],
-      "id": "20b5fdac-f612-435f-9ca3-3e420c63aad4",
+      "id": "ba3d8516-4ec9-49e7-ad4a-51d0a7da0c2d",
       "name": "Request Trailer"
     },
     {
       "parameters": {
         "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
-        "text": "=🎬 Trailer phim bạn yêu cầu đây:\n\nhttps://www.youtube.com/watch?v={{ $json.results.find(v => v.site === \"YouTube\" && v.type === \"Trailer\")?.key || $json.results[0].key }}",
+        "text": "=<a href=\"https://www.youtube.com/watch?v={{ $json.results.find(v => v.type === 'Trailer' && v.site === 'YouTube')?.key || $json.results[0]?.key }}\"> &#8203; </a>\n\n🎬 <b>TRAILER: {{ $('Request Movie').item.json.results.sort((a,b) => b.vote_count - a.vote_count)[0].title }}</b>\n<i>(Vote: {{ $('Request Movie').item.json.results.sort((a,b) => b.vote_count - a.vote_count)[0].vote_average }}/10)</i>",
+        "additionalFields": {
+          "disable_web_page_preview": false,
+          "parse_mode": "HTML"
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        400,
+        192
+      ],
+      "id": "5b657805-f04a-4247-b1cf-b469a45abb9a",
+      "name": "Send Trailer",
+      "webhookId": "c48a9c8d-c289-4b0f-9edf-b7bd20c79b0d",
+      "credentials": {
+        "telegramApi": {
+          "id": "C1i6lzI8mQLPAoyI",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $('Telegram Trigger').item.json.message.text }}",
+        "options": {
+          "systemMessage": "[VAI TRÒ]\nBạn là Trợ lý Điện ảnh AI thông minh, am hiểu và tận tụy.\n\n[DỮ LIỆU ĐẦU VÀO]\nDanh sách phim (JSON): {{ JSON.stringify($json.results) }}\n\n[CÂU HỎI CỦA NGƯỜI DÙNG]\n\"{{ $('Telegram Trigger').item.json.message.text }}\"\n\n[QUY TRÌNH XỬ LÝ]\nHãy đọc kỹ câu hỏi và xác định người dùng thuộc trường hợp nào dưới đây để trả lời:\n\n--- TRƯỜNG HỢP 1: NGƯỜI DÙNG CẦN GỢI Ý PHIM ---\n(Ví dụ: \"Phim gì hay?\", \"Tìm phim kinh dị\", \"Thích xem phim tình cảm\", \"Có phim hoạt hình không?\")\n\nBước 1: Phân tích yêu cầu\n- Kiểm tra xem người dùng có nhắc đến THỂ LOẠI cụ thể nào không (Hài, Kinh dị, Hành động...)?\n- NẾU CÓ: Lọc danh sách và chọn ra 3 phim phù hợp nhất với thể loại đó.\n- NẾU KHÔNG (hỏi chung chung): Chọn ra 3 phim có điểm đánh giá cao nhất (vote_average) hoặc đang hot nhất.\n\nBước 2: Trả lời theo mẫu\n\"Chào bạn, dựa theo sở thích của bạn, mình tìm được 3 phim này:\n\n1. TÊN PHIM (VIẾT HOA) - [Thể loại]\nReview: [Nhận xét ngắn gọn 2-3 câu, tập trung vào điểm hấp dẫn nhất của phim]\nLời khuyên: [Một câu thúc giục nhẹ nhàng, ví dụ: \"Fan kinh dị không thể bỏ qua!\"]\n\n(Lặp lại cấu trúc trên cho phim số 2 và 3)\"\n\n--- TRƯỜNG HỢP 2: NGƯỜI DÙNG HỎI CHI TIẾT 1 PHIM ---\n(Ví dụ: \"Review phim Mai\", \"Nội dung phim Đất Rừng Phương Nam là gì?\", \"Phim này có hay không?\")\n\nBước 1: Tìm kiếm\n- Tìm đúng bộ phim người dùng nhắc đến trong danh sách dữ liệu.\n\nBước 2: Trả lời sâu sắc\n- Viết một bài review chi tiết về nội dung, diễn viên và điểm đặc sắc của RIÊNG phim đó.\n- Văn phong sâu sắc, như một chuyên gia điện ảnh đang tâm sự.\n- KHÔNG liệt kê các phim khác.\n\n[QUY TẮC CHUNG]\n1. Xưng hô: \"Mình\" (AI) và \"Bạn\" (Người dùng).\n2. Giọng văn: Thân thiện, tự nhiên, gần gũi (không giống máy móc).\n3. Xử lý lỗi: Nếu người dùng hỏi thể loại mà trong danh sách KHÔNG CÓ, hãy xin lỗi khéo léo và gợi ý 3 bộ phim hay nhất thuộc thể loại khác."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        160,
+        416
+      ],
+      "id": "4e3d5e26-df56-493f-a68f-a7bcc48e6a3b",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Telegram Trigger').item.json.message.chat.id }}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        192,
+        592
+      ],
+      "id": "143fa3e3-1307-4fec-a940-83a1e5d91ea8",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolSerpApi",
+      "typeVersion": 1,
+      "position": [
+        320,
+        592
+      ],
+      "id": "5f1e532c-fecf-469b-8c52-9a97ff9b38ea",
+      "name": "SerpAPI",
+      "credentials": {
+        "serpApi": {
+          "id": "kJrYPQatL2JFYcSf",
+          "name": "SerpAPI account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "=Xin chào! 👋\nMình là trợ lý AI tra cứu phim. 🎬\nBạn muốn tìm phim gì cứ nhắn tên phim hoặc nội dung vào đây để mình tìm giúp nhé!",
         "additionalFields": {}
       },
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        640,
-        272
+        0,
+        -144
       ],
-      "id": "11535295-44e3-4635-b8fc-2fccfcd5ae28",
-      "name": "Send Trailer",
+      "id": "5d07d27d-e261-4dbc-9549-d9625c5222ec",
+      "name": "Command start",
       "webhookId": "c48a9c8d-c289-4b0f-9edf-b7bd20c79b0d",
       "credentials": {
         "telegramApi": {
-          "id": "7yMEQbBPOBUDZKED",
+          "id": "C1i6lzI8mQLPAoyI",
           "name": "Telegram account"
         }
       }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "=HƯỚNG DẪN SỬ DỤNG \nChat & Hỏi đáp:\n   • Hỏi lịch chiếu: \"Phim Mai còn chiếu không?\"\n   • Xin review: \"Review phim Bố Già 1972\"\n   • Tra cứu: \"Đạo diễn phim Oppenheimer là ai?\"\n\nXem Trailer:\n   • Cú pháp: Trailer + Tên phim\n   • Ví dụ: \"Trailer Đất Rừng Phương Nam\"\n\nLệnh cơ bản:\n   • /start: Khởi động lại bot.\n   • /help: Xem hướng dẫn sử dụng.",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "54e3fe68-f13e-4edf-817b-baf143baff1b",
+      "name": "command help",
+      "webhookId": "c48a9c8d-c289-4b0f-9edf-b7bd20c79b0d",
+      "credentials": {
+        "telegramApi": {
+          "id": "C1i6lzI8mQLPAoyI",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://api.themoviedb.org/3/movie/now_playing",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "api_key",
+              "value": "2da0cea0af334ab7e1bfeacbf330826a"
+            },
+            {
+              "name": "language",
+              "value": "en-US"
+            },
+            {
+              "name": "querry",
+              "value": "={{ $json.message.text.replace(/^[Tt]railer\\s/g, '') }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        0,
+        416
+      ],
+      "id": "e5341379-1fa1-4fba-bba7-3bf7ad1880af",
+      "name": "HTTP Request"
     }
   ],
   "pinData": {},
@@ -307,33 +392,11 @@
         ]
       ]
     },
-    "HTTP Request": {
-      "main": [
-        [
-          {
-            "node": "Basic LLM Chain",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Basic LLM Chain": {
-      "main": [
-        [
-          {
-            "node": "Send a text message",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Groq Chat Model": {
       "ai_languageModel": [
         [
           {
-            "node": "Basic LLM Chain",
+            "node": "AI Agent",
             "type": "ai_languageModel",
             "index": 0
           }
@@ -344,14 +407,14 @@
       "main": [
         [
           {
-            "node": "Send a text message1",
+            "node": "Command start",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "HTTP Request",
+            "node": "command help",
             "type": "main",
             "index": 0
           }
@@ -362,12 +425,14 @@
             "type": "main",
             "index": 0
           }
+        ],
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
         ]
-      ]
-    },
-    "Send a text message1": {
-      "main": [
-        []
       ]
     },
     "Request Movie": {
@@ -391,18 +456,63 @@
           }
         ]
       ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SerpAPI": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "active": false,
   "settings": {
     "executionOrder": "v1",
+    "binaryMode": "separate",
     "availableInMCP": false
   },
-  "versionId": "91509ab4-1029-4071-b0d5-c71b8a8d8b4a",
+  "versionId": "1adedd1f-a70a-482c-a38f-cbcc26eef4a1",
   "meta": {
     "templateCredsSetupCompleted": true,
-    "instanceId": "1a49e5d478ba56ca3784671365070ee02a9daf38f4336e68762d758500a9c431"
+    "instanceId": "53b856bbcb751cdd9ccc4f9a0e423df8af455ed511ac0cae265c3ad11d988baf"
   },
-  "id": "IAG7YkVgizT9qxLSIqJL2",
+  "id": "bsntSK8stWASqprW5rSML",
   "tags": []
 }
