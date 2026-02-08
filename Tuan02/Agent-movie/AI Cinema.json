@@ -26,48 +26,6 @@
     },
     {
       "parameters": {
-        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
-        "text": "={{$json.output.replace(/[*_`\\[\\]()]/g, '') }}",
-        "additionalFields": {}
-      },
-      "type": "n8n-nodes-base.telegram",
-      "typeVersion": 1.2,
-      "position": [
-        528,
-        416
-      ],
-      "id": "e2510050-d1de-4656-a5a8-0cf95362592c",
-      "name": "Send a text message",
-      "webhookId": "c48a9c8d-c289-4b0f-9edf-b7bd20c79b0d",
-      "credentials": {
-        "telegramApi": {
-          "id": "C1i6lzI8mQLPAoyI",
-          "name": "Telegram account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "model": "llama-3.3-70b-versatile",
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
-      "typeVersion": 1,
-      "position": [
-        80,
-        592
-      ],
-      "id": "533f9dea-2b6d-4c4a-a672-7c556fc55b8c",
-      "name": "Groq Chat Model",
-      "credentials": {
-        "groqApi": {
-          "id": "ltEHRx7S8lDeYZGx",
-          "name": "Groq account"
-        }
-      }
-    },
-    {
-      "parameters": {
         "rules": {
           "values": [
             {
@@ -258,7 +216,7 @@
         "promptType": "define",
         "text": "={{ $('Telegram Trigger').item.json.message.text }}",
         "options": {
-          "systemMessage": "[VAI TRÒ]\nBạn là Trợ lý Điện ảnh AI thông minh, am hiểu và tận tụy.\n\n[DỮ LIỆU ĐẦU VÀO]\nDanh sách phim (JSON): {{ JSON.stringify($json.results) }}\n\n[CÂU HỎI CỦA NGƯỜI DÙNG]\n\"{{ $('Telegram Trigger').item.json.message.text }}\"\n\n[QUY TRÌNH XỬ LÝ]\nHãy đọc kỹ câu hỏi và xác định người dùng thuộc trường hợp nào dưới đây để trả lời:\n\n--- TRƯỜNG HỢP 1: NGƯỜI DÙNG CẦN GỢI Ý PHIM ---\n(Ví dụ: \"Phim gì hay?\", \"Tìm phim kinh dị\", \"Thích xem phim tình cảm\", \"Có phim hoạt hình không?\")\n\nBước 1: Phân tích yêu cầu\n- Kiểm tra xem người dùng có nhắc đến THỂ LOẠI cụ thể nào không (Hài, Kinh dị, Hành động...)?\n- NẾU CÓ: Lọc danh sách và chọn ra 3 phim phù hợp nhất với thể loại đó.\n- NẾU KHÔNG (hỏi chung chung): Chọn ra 3 phim có điểm đánh giá cao nhất (vote_average) hoặc đang hot nhất.\n\nBước 2: Trả lời theo mẫu\n\"Chào bạn, dựa theo sở thích của bạn, mình tìm được 3 phim này:\n\n1. TÊN PHIM (VIẾT HOA) - [Thể loại]\nReview: [Nhận xét ngắn gọn 2-3 câu, tập trung vào điểm hấp dẫn nhất của phim]\nLời khuyên: [Một câu thúc giục nhẹ nhàng, ví dụ: \"Fan kinh dị không thể bỏ qua!\"]\n\n(Lặp lại cấu trúc trên cho phim số 2 và 3)\"\n\n--- TRƯỜNG HỢP 2: NGƯỜI DÙNG HỎI CHI TIẾT 1 PHIM ---\n(Ví dụ: \"Review phim Mai\", \"Nội dung phim Đất Rừng Phương Nam là gì?\", \"Phim này có hay không?\")\n\nBước 1: Tìm kiếm\n- Tìm đúng bộ phim người dùng nhắc đến trong danh sách dữ liệu.\n\nBước 2: Trả lời sâu sắc\n- Viết một bài review chi tiết về nội dung, diễn viên và điểm đặc sắc của RIÊNG phim đó.\n- Văn phong sâu sắc, như một chuyên gia điện ảnh đang tâm sự.\n- KHÔNG liệt kê các phim khác.\n\n[QUY TẮC CHUNG]\n1. Xưng hô: \"Mình\" (AI) và \"Bạn\" (Người dùng).\n2. Giọng văn: Thân thiện, tự nhiên, gần gũi (không giống máy móc).\n3. Xử lý lỗi: Nếu người dùng hỏi thể loại mà trong danh sách KHÔNG CÓ, hãy xin lỗi khéo léo và gợi ý 3 bộ phim hay nhất thuộc thể loại khác."
+          "systemMessage": "[VAI TRÒ] Bạn là Trợ lý Điện ảnh AI thông minh, am hiểu và tận tụy. Nhiệm vụ của bạn là tư vấn phim dựa trên danh sách phim ĐANG CHIẾU THỰC TẾ được cung cấp trong JSON.\n\n[DỮ LIỆU ĐẦU VÀO] Danh sách phim (JSON): {{ JSON.stringify($json.results) }}\n\n[QUY TẮC CỐT LÕI - KHÔNG ĐƯỢC VI PHẠM]\n\nCHỈ SỬ DỤNG PHIM TRONG JSON: Tuyệt đối không gợi ý các phim cũ từ dữ liệu huấn luyện (ví dụ: John Wick 4, Spider-Man: Across the Spider-Verse, Mai, Đất Rừng Phương Nam) trừ khi chúng xuất hiện trong danh sách JSON phía trên.\n\nCẬP NHẬT THỜI GIAN: Hôm nay là Thứ Ba, ngày 03/02/2026.\n\nXƯNG HÔ: \"Mình\" và \"Bạn\". Giọng văn hào hứng, sành điệu như một người bạn đam mê điện ảnh.\n\n[CÂU HỎI CỦA NGƯỜI DÙNG] \"{{ $('Telegram Trigger').item.json.message.text }}\"\n\n[QUY TRÌNH XỬ LÝ]\n\n--- TRƯỜNG HỢP 1: GỢI Ý PHIM ---\n\nLọc dữ liệu: Tìm phim theo đúng thể loại người dùng yêu cầu (Kinh dị, Hành động, Hoạt hình...).\n\nXử lý nếu không có: Nếu thể loại yêu cầu không có trong JSON, hãy xin lỗi khéo léo: \"Tiếc quá, hôm nay rạp chưa có phim [Thể loại] mới, nhưng mình tìm thấy 3 cực phẩm khác đang rất hot, bạn xem thử nhé!\"\n\nPhản hồi (Tối đa 3 phim): \"Chào bạn, dựa trên sở thích của bạn, mình đã lựa ra 3 'siêu phẩm' thực tế nhất tại rạp hôm nay:\n\n[TÊN PHIM VIẾT HOA] - [Thể loại]\n\nReview: [Lấy thông tin từ cột 'overview' hoặc 'description' trong JSON để viết 2 câu mô tả chân thực].\n\nTại sao nên xem: [Nhắc đến yếu tố thu hút như: Kỹ xảo, diễn viên, hoặc định dạng IMAX/4DX nếu có].\n\nLời khuyên: [Một câu chốt đầy cảm hứng].\n\n(Lặp lại cho phim 2 và 3)\"\n\n--- TRƯỜNG HỢP 2: CHI TIẾT 1 BỘ PHIM ---\n\nTìm chính xác tên phim trong JSON.\n\nViết bài review sâu sắc (khoảng 100-150 từ): Tập trung vào nội dung, độ tuổi quy định (T13, T16, T18) và điểm đặc sắc. Tuyệt đối không nhắc phim khác.\n\n--- TRƯỜNG HỢP 3: LỊCH CHIẾU/PHIM MỚI --- Nếu người dùng hỏi chung chung \"Hôm nay có phim gì?\", hãy liệt kê theo nhóm: \"Phim Bom Tấn\", \"Phim Kinh Dị\", \"Phim Việt\"."
         }
       },
       "type": "@n8n/n8n-nodes-langchain.agent",
@@ -269,39 +227,6 @@
       ],
       "id": "4e3d5e26-df56-493f-a68f-a7bcc48e6a3b",
       "name": "AI Agent"
-    },
-    {
-      "parameters": {
-        "sessionIdType": "customKey",
-        "sessionKey": "={{ $('Telegram Trigger').item.json.message.chat.id }}"
-      },
-      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
-      "typeVersion": 1.3,
-      "position": [
-        192,
-        592
-      ],
-      "id": "143fa3e3-1307-4fec-a940-83a1e5d91ea8",
-      "name": "Simple Memory"
-    },
-    {
-      "parameters": {
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.toolSerpApi",
-      "typeVersion": 1,
-      "position": [
-        320,
-        592
-      ],
-      "id": "5f1e532c-fecf-469b-8c52-9a97ff9b38ea",
-      "name": "SerpAPI",
-      "credentials": {
-        "serpApi": {
-          "id": "kJrYPQatL2JFYcSf",
-          "name": "SerpAPI account"
-        }
-      }
     },
     {
       "parameters": {
@@ -377,6 +302,81 @@
       ],
       "id": "e5341379-1fa1-4fba-bba7-3bf7ad1880af",
       "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "={{$json.output.replace(/[*_`\\[\\]()]/g, '') }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        528,
+        416
+      ],
+      "id": "e2510050-d1de-4656-a5a8-0cf95362592c",
+      "name": "Send answer",
+      "webhookId": "c48a9c8d-c289-4b0f-9edf-b7bd20c79b0d",
+      "credentials": {
+        "telegramApi": {
+          "id": "C1i6lzI8mQLPAoyI",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "llama-3.3-70b-versatile",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        128,
+        624
+      ],
+      "id": "533f9dea-2b6d-4c4a-a672-7c556fc55b8c",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "ltEHRx7S8lDeYZGx",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Telegram Trigger').item.json.message.chat.id }}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        240,
+        624
+      ],
+      "id": "37eed7a1-a8f9-409a-ae0f-ce6ddf4b3c43",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolSerpApi",
+      "typeVersion": 1,
+      "position": [
+        352,
+        624
+      ],
+      "id": "44b22cb1-2a93-4987-b2b5-150321427e47",
+      "name": "SerpAPI",
+      "credentials": {
+        "serpApi": {
+          "id": "kJrYPQatL2JFYcSf",
+          "name": "SerpAPI account"
+        }
+      }
     }
   ],
   "pinData": {},
@@ -387,17 +387,6 @@
           {
             "node": "Switch",
             "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Groq Chat Model": {
-      "ai_languageModel": [
-        [
-          {
-            "node": "AI Agent",
-            "type": "ai_languageModel",
             "index": 0
           }
         ]
@@ -461,8 +450,30 @@
       "main": [
         [
           {
-            "node": "Send a text message",
+            "node": "Send answer",
             "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
             "index": 0
           }
         ]
@@ -489,26 +500,15 @@
           }
         ]
       ]
-    },
-    "HTTP Request": {
-      "main": [
-        [
-          {
-            "node": "AI Agent",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
     }
   },
-  "active": false,
+  "active": true,
   "settings": {
     "executionOrder": "v1",
     "binaryMode": "separate",
     "availableInMCP": false
   },
-  "versionId": "1adedd1f-a70a-482c-a38f-cbcc26eef4a1",
+  "versionId": "208a60ca-b2ec-4f6b-ba13-852c9766d825",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "53b856bbcb751cdd9ccc4f9a0e423df8af455ed511ac0cae265c3ad11d988baf"
